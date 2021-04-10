@@ -1,0 +1,13 @@
+{
+    "backgrounds": [
+        {
+            "tiles": "sky",
+            "renges": [
+                [
+                    0, 25,
+                    0, 14
+                ]
+            ]
+        }
+    ]
+}
