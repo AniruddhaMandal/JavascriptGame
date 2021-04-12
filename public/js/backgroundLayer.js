@@ -21,3 +21,8 @@ export function createBackgroundLayer(backgrounds, sprite){
     };
 }
 
+export function createSpriteLayer(entity){
+    return function spriteLayer(context){
+        entity.draw(context);
+    }
+}

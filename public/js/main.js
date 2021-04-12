@@ -1,39 +1,35 @@
 import Compositor from './Compositor.js'
-import {createBackgroundLayer} from './backgroundLayer.js'
+import {createSpriteLayer,createBackgroundLayer} from './backgroundLayer.js'
 import {loadLevel} from './loaders.js'
-import {loadMarioSprite, loadBackgroundSprites} from './sprites.js'
+import {loadBackgroundSprites} from './sprites.js'
+import Entity from './Entity.js'
+import {createMario} from './entities.js'
 
 const canvas = document.getElementById('screen');
 const context = canvas.getContext('2d');
 
-function createSpriteLayer(sprite, pos){
-    return function spriteLayer(context){
-        sprite.draw('idle', context, pos.x, pos.y);
-    }
-}
+
+
 
 Promise.all([
-    loadMarioSprite(),loadBackgroundSprites(), loadLevel('1-1')
+    createMario(),loadBackgroundSprites(), loadLevel('1-1')
 ])
-.then(([marioSprite,backgroundSprites, level]) => {
+.then(([Mario,backgroundSprites, level]) => {
 
     const com = new Compositor();
     
     const backgroundLayer = createBackgroundLayer(level.backgrounds, backgroundSprites);
     com.layers.push(backgroundLayer);
 
-    const pos = {
-        x: 64,
-        y: 64
-    };
-
-    const spriteLayer = createSpriteLayer(marioSprite, pos);
+    const spriteLayer = createSpriteLayer(Mario);
     com.layers.push(spriteLayer);
+
+    const gravity = 0.5;
 
     function update(){
         com.draw(context);
-        pos.x +=2;
-        pos.y +=2;
+        Mario.update();
+        Mario.vel.y += gravity;
         requestAnimationFrame(update);
     };
     update()
